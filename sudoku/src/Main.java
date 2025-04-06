@@ -11,6 +11,7 @@ import java.util.stream.Stream;
 
 import model.Board;
 import model.Space;
+import static util.BoardTemplate.BOARD_TEMPLATE;
 
 public class Main {
 
@@ -70,23 +71,66 @@ public class Main {
 }
 
     private static void clearGame() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'clearGame'");
+        if (isNull(board)){
+            System.out.println("O jogo ainda não foi iniciado iniciado");
+            return;
+        }
+
+        System.out.println("Tem certeza que deseja limpar seu jogo e perder todo seu progresso?");
+        var confirm = scanner.next();
+        while (!confirm.equalsIgnoreCase("sim") && !confirm.equalsIgnoreCase("não")){
+            System.out.println("Informe 'sim' ou 'não'");
+            confirm = scanner.next();
+        }
+
+        if(confirm.equalsIgnoreCase("sim")){
+            board.reset();
+        }
     }
 
     private static void finishGame() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'finishGame'");
+        if(isNull(board)){
+            System.out.println("Jogo ainda não iniciado!");
+            return;
+        }
+        if(board.gameIsFinished()){
+            System.out.println("Parabéns, vocé ganhou o jogo!");
+            showCurrentGame();
+            board=null;
+        }else if(board.hasErrors()){
+            System.out.println("Seu jogo possui erros! Verifique e tente novamente!");
+        }else{
+            System.out.println("Você ainda precisa preencher algum espaço!");
+        }
     }
 
     private static void showGameStatus() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'showGameStatus'");
+        if(isNull(board)){
+            System.out.println("Jogo ainda não iniciado!");
+            return;
+        }
+        System.out.println("O jogo atualmente se encontra no status: %s".formatted(board.getStatus().getLabel()));
+        if(board.hasErrors()){
+            System.out.println("O jogo possui erros!");
+        }else{
+            System.out.println("O jogo não possui erros!");
+        }
     }
 
     private static void showCurrentGame() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'showCurrentGame'");
+       if(isNull(board)){
+            System.out.println("Jogo ainda não iniciado!");
+            return;
+        }
+        var args = new Object[81];
+        var argsPos = 0;
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            for(var col: board.getSpaces()){
+                args[argsPos++] = " " + ((isNull(col.get(i).getActual()))? " ":col.get(i).getActual());
+            }
+        }
+        System.out.println("Seu jogo se encontra assim:");
+        System.out.printf((BOARD_TEMPLATE)+"\n",args);
     }
 
     private static void removeNumber() {
@@ -126,7 +170,7 @@ public class Main {
         }
     }
 
-    private static void startGame(Map<String, String> positions) {
+    private static void startGame(final Map<String, String> positions) {
         if(nonNull(board)){
             System.out.println("Jogo já iniciado!");
             return;
