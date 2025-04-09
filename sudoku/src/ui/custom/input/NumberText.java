@@ -3,6 +3,9 @@ package ui.custom.input;
 import java.awt.Dimension;
 import java.awt.Font;
 
+import service.EventEnum;
+import service.EventListener;
+
 import static java.awt.Font.PLAIN;
 
 import javax.swing.JTextField;
@@ -11,12 +14,12 @@ import javax.swing.event.DocumentListener;
 
 import model.Space;
 
-public class NumberText extends JTextField{
+public class NumberText extends JTextField implements EventListener{
     private Space space;
 
     public NumberText(final Space space) {
         this.space = space;
-        var dimension = new Dimension();
+        var dimension = new Dimension(50,50);
         this.setSize(dimension);
         this.setPreferredSize(dimension);
         this.setVisible(true);
@@ -54,5 +57,12 @@ public class NumberText extends JTextField{
             }
             
         });
+    }
+
+    @Override
+    public void update(EventEnum eventType) {
+        if(eventType == EventEnum.CLEAR_SPACE && this.isEnabled()){
+            this.setText("");
+        }
     }   
 }
