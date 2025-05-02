@@ -25,10 +25,10 @@ public class GlobalExceptionHandler {
     }
 
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleUnexpectedException(Exception unexpectedException){
-        var message = "Unexpected server error, see the logs.";
-        logger.error("",unexpectedException);
-        return new ResponseEntity<>(message,HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    // @ExceptionHandler(Throwable.class)
+    // public ResponseEntity<String> handleUnexpectedException(Throwable unexpectedException){
+    //     var message = "Unexpected server error, see the logs.";
+    //     logger.error("",unexpectedException);
+    //     return new ResponseEntity<>(message,HttpStatus.INTERNAL_SERVER_ERROR);
+    // }
 }
